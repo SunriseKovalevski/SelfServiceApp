@@ -1,14 +1,20 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
+import { updateRecord } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getMenuItems from '@salesforce/apex/ItemController.getMenuItems';
 import getGroups from '@salesforce/apex/ItemController.getGroups';
 import getMainGroups from '@salesforce/apex/ItemController.getMainGroups';
 import getItemsTree from '@salesforce/apex/ItemController.getItemsTree';
+import getMenuItemsById from '@salesforce/apex/ItemController.getMenuItemsById';
 
-const columns = [
+const DELAY = 300;
+
+const COLUMNS = [
     { label: 'Название', fieldName: 'Name' },
     { label: 'Цена', fieldName: 'Cost__c', type: 'currency' },
     { label: 'Описание блюда', fieldName: 'Description__c' },
-    { label: 'Количество порций', fieldName: 'Portions__c' },
+    { label: 'Количество порций', fieldName: 'Portions__c', type: 'number', editable : 'true' },
     { label: 'Комментарий', fieldName: 'Comment__c' },
 ];
 
@@ -17,14 +23,72 @@ const columns = [
 
 export default class MenuPage extends LightningElement {
     error;
-    columns = columns;
+    gId = ' ';
+    saveDraftValues;
+    @track columns = COLUMNS;
+    @track draftValues = [];
+    @api recordId;
 
 
-    @wire(getMenuItems) menuItems;
+
+ //   @wire(getMenuItems) 
+ //   menuItems;
    //  @wire(getGroups) groupItems;
   //   @wire(getMainGroups) mainGroupItems;
-   @wire(getItemsTree) itemsTree;
-    
+  @wire(getMenuItemsById,{ gId : '$gId'}) 
+  menuItems;
+    @wire(getItemsTree) 
+    itemsTree;
+
+   
+    handleSelect(event) {
+        window.clearTimeout(this.delayTimeout);
+        const gId = event.detail.name;
+        this.delayTimeout = setTimeout(() => {
+            this.gId = gId;
+        }, DELAY);
+    }
+
+    handleSave(event) {
+        window.clearTimeout(this.delayTimeout);
+        const saveDraftValues = event.detail.draftValues;
+        this.delayTimeout = setTimeout(() => {
+            this.saveDraftValues = saveDraftValues;
+        }, DELAY);
+
+    }
+
+
+
+    handleSave(event) {
+
+        const recordInputs =  event.detail.draftValues.slice().map(draft => {
+            const fields = Object.assign({}, draft);
+            return { fields };
+        });
+
+        const promises = recordInputs.map(recordInput => updateRecord(recordInput));
+
+        Promise.all(promises).then(records => {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'Contact updated',
+                    variant: 'success'
+                })
+            );
+            this.draftValues = [];
+            return refreshApex(this.menuItems);
+        }).catch(error => {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error updating record',
+                    message: error.body.message,
+                    variant: 'error'
+                })
+            );
+        });        
+    }
    
 }
 
