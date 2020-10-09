@@ -50,17 +50,6 @@ export default class MenuPage extends LightningElement {
     }
 
     handleSave(event) {
-        window.clearTimeout(this.delayTimeout);
-        const saveDraftValues = event.detail.draftValues;
-        this.delayTimeout = setTimeout(() => {
-            this.saveDraftValues = saveDraftValues;
-        }, DELAY);
-
-    }
-
-
-
-    handleSave(event) {
 
         const recordInputs =  event.detail.draftValues.slice().map(draft => {
             const fields = Object.assign({}, draft);
