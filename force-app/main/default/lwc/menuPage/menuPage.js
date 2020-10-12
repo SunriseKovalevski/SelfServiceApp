@@ -88,6 +88,12 @@ export default class MenuPage extends LightningElement {
         this.handlePageChange();
     }
 
+    handleComboBoxChange(event) {
+        this.pageNumber = 1;
+        this.recordsPerPage = event.target.value;
+        this.handlePageChange();
+    }
+
 
     handlePageChange() {
         
