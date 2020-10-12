@@ -87,12 +87,27 @@ export default class MenuPage extends LightningElement {
             column.fieldName).type;
         this.handlePageChange();
     }
+    
+    handleNextPage(event) {
+        if(this.pageNumber < this.totalPageCount) {
+            this.pageNumber = this.pageNumber + 1;
+        }
+        this.handlePageChange();
+    }
+
+    handlePrevPage(event) {
+        if(this.pageNumber > 1) {
+            this.pageNumber = this.pageNumber - 1;
+        }
+        this.handlePageChange();
+    }
 
     handleComboBoxChange(event) {
         this.pageNumber = 1;
         this.recordsPerPage = event.target.value;
         this.handlePageChange();
     }
+
 
 
     handlePageChange() {
