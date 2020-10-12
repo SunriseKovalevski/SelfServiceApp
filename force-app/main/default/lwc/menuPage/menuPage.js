@@ -18,9 +18,6 @@ const COLUMNS = [
     { label: 'Комментарий', fieldName: 'Comment__c' },
 ];
 
-
-
-
 export default class MenuPage extends LightningElement {
     error;
     gId = ' ';
@@ -28,8 +25,6 @@ export default class MenuPage extends LightningElement {
     @track columns = COLUMNS;
     @track draftValues = [];
     @api recordId;
-
-
 
  //   @wire(getMenuItems) 
  //   menuItems;
@@ -40,7 +35,6 @@ export default class MenuPage extends LightningElement {
     @wire(getItemsTree) 
     itemsTree;
 
-   
     handleSelect(event) {
         window.clearTimeout(this.delayTimeout);
         const gId = event.detail.name;
@@ -77,6 +71,17 @@ export default class MenuPage extends LightningElement {
                 })
             );
         });        
+    }
+
+    handleKeyWordChange(event) {
+        this.pageNumber = 1;
+        this.keyword = event.target.value;
+        this.handlePageChange();
+    }
+
+
+    handlePageChange() {
+        
     }
    
 }
