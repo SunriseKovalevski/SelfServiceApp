@@ -108,6 +108,18 @@ export default class MenuPage extends LightningElement {
         this.handlePageChange();
     }
 
+    updatePageButtons() {
+        if(this.pageNumber === 1) {
+            this.isFirstPage = true;
+        } else {
+            this.isFirstPage = false;
+        }
+        if(this.pageNumber >= this.totalPageCount) {
+            this.isLastPage = true;
+        } else {
+            this.isLastPage = false;
+        }
+    }
 
 
     handlePageChange() {
