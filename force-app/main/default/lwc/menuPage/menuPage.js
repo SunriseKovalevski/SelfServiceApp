@@ -79,6 +79,15 @@ export default class MenuPage extends LightningElement {
         this.handlePageChange();
     }
 
+    handleSort(event) {
+        this.pageNumber = 1;
+        this.sortedField = event.detail.fieldName;
+        this.sortDirection = event.detail.sortDirection;
+        this.sortType = this.columns.find(column => this.sortedField === 
+            column.fieldName).type;
+        this.handlePageChange();
+    }
+
 
     handlePageChange() {
         
