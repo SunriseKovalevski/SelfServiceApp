@@ -1,14 +1,117 @@
 <template>
     <div class="c-container">
-        <lightning-layout multiple-rows="true">
-            <!-- layout for group menu -->
-            <lightning-layout-item padding="around-small" size="3">
+        <div class = "container">
+            <lightning-card>
+              <lightning-layout multiple-rows="true">
+                <lightning-layout-item padding="around-small" size="3">
+                    <lightning-card>
+                        <template if:true={itemsTree.data}>
+                            <div class="slds-p-around_small"> 
+                                <lightning-tree items={itemsTree.data} header="Menu" ></lightning-tree>
+                            </div>
+                        </template>
+                    </lightning-card>   
+                </lightning-layout-item>
+                <lightning-layout-item size = "9" margin= "around-small">
+                <lightning-layout-item size = "12" margin= "around-small">
+                  <div class="slds-align_absolute-center">
+                     <ul class="slds-button-group-row">
+                         <template if:true={hasPrev}>
+                          <li class="slds-button-group-item" > 
+                                  <button class="slds-button slds-button_neutral" onclick ={onPrev}> prev
+                                   </button>
+                               </li>
+                          </template>
+                          <template for:each={pagesList} for:item= "pageNumber">
+                       <li class="slds-button-group-item"  key={pageNumber}> 
+                           <button data-id={pageNumber}  class="slds-button slds-button_neutral" onclick={onPageClick}>{pageNumber}</button>
+                       </li>
+                  </template>
+                  <template if:true={hasNext}>
+                  <li class="slds-button-group-item" > 
+                          <button class="slds-button slds-button_neutral"  onclick={onNext} >next</button>
+                       </li>
+                      </template>
+                    </ul>
+                  </div>
+              </lightning-layout-item>
+              <lightning-layout-item size = "12"  padding = "around-medium">
+                 <div  class="slds-align_absolute-center">
 
+
+                      <lightning-datatable
+                            class="datatable"
+                            key-field="id"
+                            data={currentPageData}
+                            columns={columns} 
+                            onsave={handleSave} 
+                            onsort={handleSort}
+                            sorted-by={sortecField}
+                            sorted-direction={sortDirection}
+                            onrowselection={handleRowSelect}
+                            draft-values={draftValues} 
+                            hide-checkbox-column=true
+                            >
+                      </lightning-datatable>
+
+
+                  </div>
+                </lightning-layout-item>
             </lightning-layout-item>
-            <!-- layout for menu items -->
+           </lightning-layout>
+          </lightning-card>
+          </div>
+    <!--        <lightning-layout multiple-rows="true">
+
+            <lightning-layout-item padding="around-small" size="3">
+                <lightning-card>
+                    <template if:true={itemsTree.data}>
+                    <div class="slds-p-around_small"> 
+                        <lightning-tree items={itemsTree.data} header="Menu" ></lightning-tree>
+                   </div>
+                   </template>
+
+            </lightning-card>   
+
+            </lightning-layout-item> 
+
             <lightning-layout-item padding="around-small" size="9">
-                
-            </lightning-layout-item>
-        </lightning-layout>
+   
+                <lightning-combobox class="combobox"
+                                        name="Number Of Records"
+                                        value={recordsPerPage}
+                                        placeholder={recordsPerPage}
+                                        options={comboBoxOptions}
+                                        onchange={handleComboBoxChange}>
+                </lightning-combobox>
+                <lightning-input class="searchBar"
+                                        label="Search"
+                                        value={keyword}
+                                        onchange={handleKeyWordChange}>
+                </lightning-input>   
+                <div class="slds-m-around_medium"> 
+            <template if:true={menuItems.data}>
+               <lightning-datatable
+                    class="datatable"
+                    key-field="Id"
+                    data={menuItems.data}
+                    columns={columns} 
+                    onsave={handleSave} 
+                    onsort={handleSort}
+                    sorted-by={sortecField}
+                    sorted-direction={sortDirection}
+                    onrowselection={handleRowSelect}
+                    draft-values={draftValues} 
+                    hide-checkbox-column=true
+                   >
+                </lightning-datatable>
+            </template>
+            <br/>
+    <c-paginator  onprevious={previousHandler2} onnext={nextHandler2} onselected={changeHandler2} onfirstpage={firstpagehandler} onlastpage={lastpagehandler}></c-paginator> 
+        </div>
+            </lightning-layout-item> -->
+            
+          
+      
     </div>
 </template>
