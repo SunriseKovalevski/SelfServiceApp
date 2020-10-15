@@ -60,22 +60,39 @@ export default class MenuPage extends LightningElement {
     gId = ' ';
     data=[];
     page = 1;
-    perpage = 1;
+    perpage = 2;
     pages = [];
     set_size = 5;
+    sortBy;
+    sortDirection;
 
     columns = columns;
 
     @wire(getItemsTree) itemsTree;
-    @wire(getMenuItemsById, {gId : '$gId'} ) actualMenuItems;
+ /*   @wire(getMenuItems) 
+    getMenuItems (result) {
+        if (result.data) {
+            this.data = result.data;
+            this.error = undefined;
+            this.setPages(this.data);
+
+        } else if (result.error) {
+            this.error = result.error;
+            this.data = undefined;
+            
+        }
+    }*/
+   // @wire(getMenuItemsById, {gId : '$gId'} ) actualMenuItems;
 
 
     handleSortdata(event) {
         // field name
+        console.log ('enter sort data ' );
         this.sortBy = event.detail.fieldName;
-
+        console.log ('this.sortBy ' + this.sortBy);
         // sort direction
         this.sortDirection = event.detail.sortDirection;
+        console.log('this.sortDirection ' + this.sortDirection);
 
         // calling sortdata function to sort the data based on direction and selected field
         this.sortData(event.detail.fieldName, event.detail.sortDirection);
@@ -83,6 +100,29 @@ export default class MenuPage extends LightningElement {
 
 
     sortData(fieldname, direction) {
+        // serialize the data before calling sort function
+        let parseData = JSON.parse(JSON.stringify(this.data));
+        console.log( ' ' + parseData);
+
+        // Return the value stored in the field
+        let keyValue = (a) => {
+            return a[fieldname];
+        };
+
+        // cheking reverse direction 
+        let isReverse = direction === 'asc' ? 1: -1;
+
+        // sorting data 
+        parseData.sort((x, y) => {
+            x = keyValue(x) ? keyValue(x) : ''; // handling null values
+            y = keyValue(y) ? keyValue(y) : '';
+
+            // sorting values based on direction
+            return isReverse * ((x > y) - (y > x));
+        });
+
+        // set the sorted data to data table data
+        this.data = parseData;
     }
 
     handleSelect(event) {

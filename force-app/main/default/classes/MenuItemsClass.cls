@@ -3,7 +3,7 @@ public with sharing class MenuItemsClass {
 
     }
     
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static List<Item__c> getMenuItems(){
           return [SELECT Id, Name, Cost__c, Description__c, Portions__c, Comment__c FROM Item__c];
         //  [SELECT Id, Name FROM Item__c];
