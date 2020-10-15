@@ -84,6 +84,24 @@ export default class MenuPage extends LightningElement {
     }*/
    // @wire(getMenuItemsById, {gId : '$gId'} ) actualMenuItems;
 
+   timerId;
+/*
+startSearchTimer(event) {
+  clearTimeout(this.timerId);
+  this.timerId = setTimeout(this.doSearch.bind(this),500);
+}
+doSearch() {
+  fetchAccounts({userId:this.userId,searchKey:this.searchKey})
+  .then(data => {
+    this.Acc = data;
+    this.error = null;
+  })
+  .catch(error => {
+    this.Acc = null;
+    this.error = error;
+  });
+}
+*/
 
     handleSortdata(event) {
         // field name
