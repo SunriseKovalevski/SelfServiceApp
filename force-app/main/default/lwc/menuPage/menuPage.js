@@ -18,11 +18,11 @@ const DELAY = 300;
 
 
 const columns = [
-    { label: 'Название', fieldName: 'Name' },
-    { label: 'Цена', fieldName: 'Cost__c'},
-    { label: 'Описание блюда', fieldName: 'Description__c'},
-    { label: 'Количество порций', fieldName: 'Portions__c'},
-    { label: 'Комментарий', fieldName: 'Comment__c' },
+    { label: 'Название', fieldName: 'Name', sortable: "true" },
+    { label: 'Цена', fieldName: 'Cost__c', sortable: "true"},
+    { label: 'Описание блюда', fieldName: 'Description__c', sortable: "true"},
+    { label: 'Количество порций', fieldName: 'Portions__c', sortable: "true"},
+    { label: 'Комментарий', fieldName: 'Comment__c', sortable: "true"},
     ];
 
 
@@ -57,24 +57,52 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
-    @track gId = ' ';
+    gId = ' ';
     data=[];
-    @track page = 1;
+    page = 1;
     perpage = 1;
-    @track pages = [];
+    pages = [];
     set_size = 5;
 
     columns = columns;
 
     @wire(getItemsTree) itemsTree;
+    @wire(getMenuItemsById, {gId : '$gId'} ) actualMenuItems;
+
+
+    handleSortdata(event) {
+        // field name
+        this.sortBy = event.detail.fieldName;
+
+        // sort direction
+        this.sortDirection = event.detail.sortDirection;
+
+        // calling sortdata function to sort the data based on direction and selected field
+        this.sortData(event.detail.fieldName, event.detail.sortDirection);
+    }
+
+
+    sortData(fieldname, direction) {
+    }
 
     handleSelect(event) {
         window.clearTimeout(this.delayTimeout);
         const gId = event.detail.name;
-
+        console.log( ' ' + actualMenuItems.data);
         this.delayTimeout = setTimeout(() => {
+
+// сюда написать функцию которая обработает количество записей с учетом новой айдишки (айдишку для сравнения принадлежности в меню записать сразу из базы)
+
+            console.log(' ' + gId);
             this.gId = gId;
+            console.log(' ' + this.gId);
+            console.log(' ' + this.data);
+           /* this.data = actualMenuItems.data;
+            console.log(' ' + this.data);
+            this.setPages(this.data);*/
+
         }, DELAY);
+
     }
     
     renderedCallback(){

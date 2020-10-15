@@ -14,9 +14,9 @@ public with sharing class MenuItemsClass {
     public static List<Item__c> getMenuItemsById(String gId){
    
         
-       /* if (gId != ' ') {
+        if (gId != ' ') {
             return [SELECT Id, Name, Cost__c, Description__c, Portions__c, Comment__c FROM Item__c WHERE Group__r.Id=:gId ];
-        } */
+        } 
         return [SELECT Id, Name, Cost__c, Description__c, Portions__c, Comment__c FROM Item__c];
         
     }
