@@ -18,10 +18,14 @@
                 <lightning-layout-item size = "9" margin= "around-small">
                     
                 <lightning-layout-item size = "12" margin= "around-small">
-                    <div class="slds-m-around_medium"> 
-                        <lightning-input type = "search" value={searchKey} onkeyup={startSearchTimer}>
+
+
+                    
+                        <lightning-input placeholder="type here..." type="search" label="Search" onchange={handleSearch}>
                         </lightning-input>
-                    </div>
+                        <lightning-button label="Click" variant="brand" onclick={handleFilter}></lightning-button>
+
+
                   <div class="slds-align_absolute-center">
                      <ul class="slds-button-group-row">
                          <template if:true={hasPrev}>

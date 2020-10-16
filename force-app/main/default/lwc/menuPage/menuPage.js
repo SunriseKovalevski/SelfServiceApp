@@ -57,6 +57,7 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
+    inputValue = '';
     gId = ' ';
     data=[];
     page = 1;
@@ -65,6 +66,7 @@ export default class MenuPage extends LightningElement {
     set_size = 5;
     sortBy;
     sortDirection;
+    tmpData;
 
     columns = columns;
 
@@ -84,24 +86,64 @@ export default class MenuPage extends LightningElement {
     }*/
    // @wire(getMenuItemsById, {gId : '$gId'} ) actualMenuItems;
 
+   async connectedCallback(){
+    this.data = await getMenuItems();
+    this.setPages(this.data);
+ }
+
+
    timerId;
-/*
-startSearchTimer(event) {
-  clearTimeout(this.timerId);
-  this.timerId = setTimeout(this.doSearch.bind(this),500);
-}
-doSearch() {
-  fetchAccounts({userId:this.userId,searchKey:this.searchKey})
-  .then(data => {
-    this.Acc = data;
-    this.error = null;
-  })
-  .catch(error => {
-    this.Acc = null;
-    this.error = error;
-  });
-}
-*/
+
+   handleSearch(event) {
+    /*const inputValue = event.target.value[0];
+
+    const regex = new RegExp(`^${inputValue}`, 'i');     
+    this.phones = this._phones.filter(row => regex.test(row.name) || regex.test(row.ticker) || regex.test(row.shareclass));
+
+    if (!event.target.value) {
+        this.phones = [...this._phones];
+    }*/
+        this.inputValue = event.target.value;
+        console.log(event.target.value);
+    }
+
+    handleFilter(){
+        //searchtext = this.inputValue;
+        this.tmpData = '';
+        console.log(this.inputValue);
+       /* 
+        this.currentPageData = this.data.filter(element => {           
+            return element.Name.toUpperCase().includes(this.inputValue.toUpperCase());
+        
+        }
+        );*/
+        this.currentPageData =this.data.filter(element => {
+            console.log (' ' + element.Name.toUpperCase().includes(this.inputValue.toUpperCase()));
+    
+           });
+        console.log(' '  +  this.data);
+      //  tmpData = this.currentPageData;
+        console.log(' '  +  this.data.length);
+    //    console.log(' '  + tmpData.length);
+       /* this.data = this.data.filter(d => {
+        return d.name.toUpperCase().includes(this.inputValue.toUpperCase());
+        
+       });
+       */
+     
+    
+       /*    if (str.name.toUpperCase().include(this.inputValue.toUpperCase())) {
+           console.log('Y ' + str);
+           } else {
+            console.log('N ' + str.name);
+           }*/
+
+       
+      // console.log(this.tmpData.name);
+    //   this.setPages(this.data);
+    }
+
+
 
     handleSortdata(event) {
         // field name
@@ -179,10 +221,6 @@ doSearch() {
         return this.pages.slice(0,this.set_size);
      }
     
-     async connectedCallback(){
-        this.data = await getMenuItems();
-        this.setPages(this.data);
-     }
     
     pageData = ()=>{
         let page = this.page;
