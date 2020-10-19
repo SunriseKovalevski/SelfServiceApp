@@ -85,13 +85,36 @@ export default class MenuPage extends LightningElement {
             
         }
     }*/
-   // @wire(getMenuItemsById, {gId : '$gId'} ) actualMenuItems;
+    loadTree(){
+        getMenuItemsById({gId: this.gId})
+        .then(result => {
+            this.data = result;
+            this.setPages(this.data);
+       
+        
+        })
+        .catch(error => {
+            this.error = error;
+            
+        });
+    }
+
+
+
+
+  @wire(getMenuItemsById, {gId : '$gId'} ) 
+   actualMenuItems ;
+
 
    async connectedCallback(){
+       console.log('hi=)');
     this.data = await getMenuItems();
+    console.log('hello');
     this.setPages(this.data);
 
+    
  }
+ 
 
 
    timerId;
@@ -208,21 +231,38 @@ export default class MenuPage extends LightningElement {
     handleSelect(event) {
         window.clearTimeout(this.delayTimeout);
         const gId = event.detail.name;
-        console.log( ' ' + actualMenuItems.data);
+     //  console.log( ' ' + actualMenuItems.data);
+     console.log(' ' + this.gId);
+            this.gId = gId;
+            this.loadTree();
+            
         this.delayTimeout = setTimeout(() => {
 
 // сюда написать функцию которая обработает количество записей с учетом новой айдишки (айдишку для сравнения принадлежности в меню записать сразу из базы)
 
-            console.log(' ' + gId);
-            this.gId = gId;
-            console.log(' ' + this.gId);
-            console.log(' ' + this.data);
-           /* this.data = actualMenuItems.data;
-            console.log(' ' + this.data);
+console.log('second  '  +  this.data);
+console.log('second  '  +  this.data.length);
+
+
+/*
+            console.log(' actualMenuItems   ' + this.actualMenuItems.data;
+            this.data = this.actualMenuItems.data;
+      
             this.setPages(this.data);*/
 
         }, DELAY);
-
+  /*      this.gId = gId;
+        console.log(' out1 ' + this.actualMenuItems.data);
+this.data = this.actualMenuItems.data;
+        console.log(' out2 ' + this.actualMenuItems.data);
+        this.setPages(this.data);*/
+     /*   (async () => {
+            this.data = await getMenuItems(gId);
+            console.log(' '  +  this.data);
+        console.log(' '  +  this.data.length);
+       
+        this.setPages(this.data);
+        })();*/
     }
     
     renderedCallback(){
