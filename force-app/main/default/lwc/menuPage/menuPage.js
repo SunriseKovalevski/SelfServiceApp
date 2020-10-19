@@ -67,6 +67,7 @@ export default class MenuPage extends LightningElement {
     sortBy;
     sortDirection;
     tmpData;
+    filterData=[];
 
     columns = columns;
 
@@ -89,6 +90,7 @@ export default class MenuPage extends LightningElement {
    async connectedCallback(){
     this.data = await getMenuItems();
     this.setPages(this.data);
+
  }
 
 
@@ -111,19 +113,37 @@ export default class MenuPage extends LightningElement {
         //searchtext = this.inputValue;
         this.tmpData = '';
         console.log(this.inputValue);
+        if (this.inputValue != '') {
+            (async () => {
+                this.data = await getMenuItems();
+                console.log(' '  +  this.data);
+            console.log(' '  +  this.data.length);
+            this.data.filter(element => {
+                console.log (' ' + element.Name.toUpperCase().includes(this.inputValue.toUpperCase()));
+            });
+            this.data = this.data.filter(element => {
+                return element.Name.toUpperCase().includes(this.inputValue.toUpperCase());
+            });
+            this.setPages(this.data);
+            })();
+           
+            
+              
+     
+            console.log(' '  +  this.data);
+            console.log(' '  +  this.data.length);
+            
+        } else {
+
+            this.connectedCallback();
+        }   
        /* 
         this.currentPageData = this.data.filter(element => {           
             return element.Name.toUpperCase().includes(this.inputValue.toUpperCase());
         
         }
         );*/
-        this.currentPageData =this.data.filter(element => {
-            console.log (' ' + element.Name.toUpperCase().includes(this.inputValue.toUpperCase()));
-    
-           });
-        console.log(' '  +  this.data);
-      //  tmpData = this.currentPageData;
-        console.log(' '  +  this.data.length);
+        
     //    console.log(' '  + tmpData.length);
        /* this.data = this.data.filter(d => {
         return d.name.toUpperCase().includes(this.inputValue.toUpperCase());
@@ -232,6 +252,7 @@ export default class MenuPage extends LightningElement {
 
     setPages = (data)=>{
         let numberOfPages = Math.ceil(data.length / this.perpage);
+        this.pages = [];
         for (let index = 1; index <= numberOfPages; index++) {
             this.pages.push(index);
         }
