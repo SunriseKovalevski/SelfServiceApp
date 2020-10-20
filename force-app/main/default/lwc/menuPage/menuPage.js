@@ -19,10 +19,17 @@ const DELAY = 300;
 
 const columns = [
     { label: 'Название', fieldName: 'Name', sortable: "true" },
-    { label: 'Цена', fieldName: 'Cost__c', sortable: "true"},
+    { label: 'Цена за порцию', fieldName: 'Cost__c', sortable: "true"},
     { label: 'Описание блюда', fieldName: 'Description__c', sortable: "true"},
     { label: 'Количество порций', fieldName: 'Portions__c', sortable: "true"},
     { label: 'Комментарий', fieldName: 'Comment__c', sortable: "true"},
+    { label: 'Добавить в заказ', type: 'button', typeAttributes: {
+
+        label: 'Add to Order',
+        name: 'addToOrder',
+        
+    
+    }},
     ];
 
 
@@ -33,6 +40,7 @@ const COLS = [
     { label: 'Описание блюда', fieldName: 'Description__c' },
     { label: 'Количество порций', fieldName: 'Portions__c', type: 'number', editable : 'true' },
     { label: 'Комментарий', fieldName: 'Comment__c' },
+    
 ];
 
 const iTree = [
@@ -57,6 +65,8 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
+
+    orderData = [];
     inputValue = '';
     gId = ' ';
     data=[];
@@ -85,6 +95,31 @@ export default class MenuPage extends LightningElement {
             
         }
     }*/
+
+
+    handleRowAction(event) {
+        console.log(JSON.stringify(event.detail.action));
+        if(event.detail.action.name==='addToOrder') {
+            this.orderData.push(event.detail.row);
+            console.log('clicked addToOrder button');
+            console.log(JSON.stringify(event.detail.row));
+            console.log(JSON.stringify(event.detail.row.Name));
+            console.log(JSON.stringify(event.detail.row.Cost__c));
+            console.log(JSON.stringify(event.detail.row.Portions__c));
+        }
+        
+    }
+/*
+    handleRowSelect(event) {
+        const selectedRows = event.detail.selectedRows;
+        for (let i = 0; i < selectedRows.length; i++){
+            console.log( ' ' +selectedRows[i].Id);
+        }
+    }
+*/
+
+
+
     loadTree(){
         getMenuItemsById({gId: this.gId})
         .then(result => {
