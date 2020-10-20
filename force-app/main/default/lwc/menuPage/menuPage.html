@@ -71,6 +71,21 @@
                   </div>
                 </lightning-layout-item>
             </lightning-layout-item>
+            <lightning-layout-item size = "12"  padding = "around-medium">
+                <div  class="slds-align_absolute-center">
+
+                    <template if:true={hasOrders}>
+                     <lightning-datatable
+                           class="datatable1"
+                           key-field="id"
+                           data={orderData}
+                           columns={cols}
+                           hide-checkbox-column=true
+                           >
+                     </lightning-datatable>
+                    </template>
+                 </div>
+               </lightning-layout-item>
            </lightning-layout>
           </lightning-card>
           </div>

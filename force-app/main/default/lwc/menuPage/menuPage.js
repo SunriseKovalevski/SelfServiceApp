@@ -18,12 +18,12 @@ const DELAY = 300;
 
 
 const columns = [
-    { label: 'Название', fieldName: 'Name', sortable: "true" },
-    { label: 'Цена за порцию', fieldName: 'Cost__c', sortable: "true"},
-    { label: 'Описание блюда', fieldName: 'Description__c', sortable: "true"},
-    { label: 'Количество порций', fieldName: 'Portions__c', sortable: "true"},
-    { label: 'Комментарий', fieldName: 'Comment__c', sortable: "true"},
-    { label: 'Добавить в заказ', type: 'button', typeAttributes: {
+    { label: 'Name', fieldName: 'Name', sortable: "true" },
+    { label: 'Cost per Serving', fieldName: 'Cost__c', sortable: "true"},
+    { label: 'Description', fieldName: 'Description__c', sortable: "true"},
+    { label: 'Servings', fieldName: 'Portions__c', sortable: "true"},
+    { label: 'Comment', fieldName: 'Comment__c', sortable: "true"},
+    { label: 'Add to Order', type: 'button', typeAttributes: {
 
         label: 'Add to Order',
         name: 'addToOrder',
@@ -35,12 +35,18 @@ const columns = [
 
 
 const COLS = [
-    { label: 'Название', fieldName: 'Name' },
-    { label: 'Цена', fieldName: 'Cost__c', type: 'currency' },
-    { label: 'Описание блюда', fieldName: 'Description__c' },
-    { label: 'Количество порций', fieldName: 'Portions__c', type: 'number', editable : 'true' },
-    { label: 'Комментарий', fieldName: 'Comment__c' },
+    { label: 'Name', fieldName: 'Name' },
+    { label: 'Cost per Serving', fieldName: 'Cost__c'},
+    { label: 'Description', fieldName: 'Description__c'},
+    { label: 'Servings', fieldName: 'Portions__c'},
+    { label: 'Comment', fieldName: 'Comment__c'},
+    { label: 'Remove from Order', type: 'button', typeAttributes: {
+
+        label: 'Remove from Order',
+        name: 'removeFromOrder',
+        
     
+    }},
 ];
 
 const iTree = [
@@ -65,8 +71,8 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
+    newOrderItem;
 
-    orderData = [];
     inputValue = '';
     gId = ' ';
     data=[];
@@ -80,6 +86,7 @@ export default class MenuPage extends LightningElement {
     filterData=[];
 
     columns = columns;
+    cols = COLS;
 
     @wire(getItemsTree) itemsTree;
  /*   @wire(getMenuItems) 
@@ -96,19 +103,41 @@ export default class MenuPage extends LightningElement {
         }
     }*/
 
+    @track orderData = [];
+
+    get hasOrders() {
+        return this.orderData && !!this.orderData.length;
+    }
+
 
     handleRowAction(event) {
         console.log(JSON.stringify(event.detail.action));
         if(event.detail.action.name==='addToOrder') {
-            this.orderData.push(event.detail.row);
+
+            this.newOrderItem = this.data.filter(element => {
+                return element.Id.toUpperCase().includes(event.detail.row.Id.toUpperCase());
+            })
+            this.orderData= [...this.orderData, this.newOrderItem[0]];
+           /* this.orderData.push (this.newOrderItem[0]
+                
+                JSON.parse(JSON.stringify(event.detail.row)) {
+                Id: event.detail.row.Id, 
+                Name: event.detail.row.Name, 
+                Cost__c: event.detail.row.Cost__c, 
+                Description__c: event.detail.row.Description__c, 
+                Portions__c: event.detail.row.Portions__c, 
+                Comment__c: event.detail.row.Comment__c,
+               
+            }*/
             console.log('clicked addToOrder button');
             console.log(JSON.stringify(event.detail.row));
             console.log(JSON.stringify(event.detail.row.Name));
             console.log(JSON.stringify(event.detail.row.Cost__c));
             console.log(JSON.stringify(event.detail.row.Portions__c));
+            console.log(JSON.stringify(this.orderData));
         }
-        
     }
+
 /*
     handleRowSelect(event) {
         const selectedRows = event.detail.selectedRows;
@@ -357,6 +386,8 @@ this.data = this.actualMenuItems.data;
     get currentPageData(){
         return this.pageData();
     }
+
+ 
 }
 
 
