@@ -16,6 +16,7 @@
                     </lightning-card>   
                 </lightning-layout-item>
                 <lightning-layout-item size = "9" margin= "around-small">
+                    <lightning-button variant="brand" label="Orders" title="Primary action" onclick={openPopupOrderList} class="slds-m-left_x-small"></lightning-button>
                     
                 <lightning-layout-item size = "12" margin= "around-small">
 
@@ -72,17 +73,30 @@
                 </lightning-layout-item>
             </lightning-layout-item>
             <lightning-layout-item size = "12"  padding = "around-medium">
+                <template if:true={hasOrders}>
+                    <p>Order Cost: {orderCost}</p>
+                        
+                <lightning-button variant="brand" label="Make an Order" title="Primary action" onclick={handleClickMakeAnOrder} class="slds-m-left_x-small"></lightning-button>
+                <lightning-button variant="brand" label="Order details" title="Primary action" onclick={showHideOrderDetails} class="slds-m-left_x-small"></lightning-button>
+            </template>
+            </lightning-layout-item>
+            <lightning-layout-item size = "12"  padding = "around-medium">
                 <div  class="slds-align_absolute-center">
 
                     <template if:true={hasOrders}>
+                        
                      <lightning-datatable
-                           class="datatable1"
-                           key-field="id"
+                           class="orderDetails"
+                           key-field="Id"
                            data={orderData}
                            columns={cols}
-                           hide-checkbox-column=true
+                           onrowaction={handleRowAction}
+                           row-number-offset={rowOffset}
+                           hide-checkbox-column=true    
+                           show-row-number-column=true
                            >
                      </lightning-datatable>
+
                     </template>
                  </div>
                </lightning-layout-item>

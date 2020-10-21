@@ -42,7 +42,7 @@ const COLS = [
     { label: 'Comment', fieldName: 'Comment__c'},
     { label: 'Remove from Order', type: 'button', typeAttributes: {
 
-        label: 'Remove from Order',
+        label: '(not working) Remove from Order',
         name: 'removeFromOrder',
         
     
@@ -72,7 +72,8 @@ const COLS = [
 export default class MenuPage extends LightningElement {
 
     newOrderItem;
-
+    rowOffset = 0;
+    orderCost = 0;
     inputValue = '';
     gId = ' ';
     data=[];
@@ -103,6 +104,20 @@ export default class MenuPage extends LightningElement {
         }
     }*/
 
+    openPopupOrderList(event) {
+        
+    }
+
+
+    showHideOrderDetails(event) {
+        // show hide orderDetails
+    }
+
+
+    handleClickMakeAnOrder(event) {
+
+    }
+
     @track orderData = [];
 
     get hasOrders() {
@@ -117,7 +132,8 @@ export default class MenuPage extends LightningElement {
             this.newOrderItem = this.data.filter(element => {
                 return element.Id.toUpperCase().includes(event.detail.row.Id.toUpperCase());
             })
-            this.orderData= [...this.orderData, this.newOrderItem[0]];
+            this.orderData = [...this.orderData, this.newOrderItem[0]];
+            this.orderCost += this.newOrderItem[0].Cost__c * this.newOrderItem[0].Portions__c;
            /* this.orderData.push (this.newOrderItem[0]
                 
                 JSON.parse(JSON.stringify(event.detail.row)) {
@@ -135,7 +151,23 @@ export default class MenuPage extends LightningElement {
             console.log(JSON.stringify(event.detail.row.Cost__c));
             console.log(JSON.stringify(event.detail.row.Portions__c));
             console.log(JSON.stringify(this.orderData));
+        } else 
+            if (event.detail.action.name==='removeFromOrder') {
+            //arr = arr.filter(n => n.id !== id)
+            console.log(' delete ' );
+          //  console.log(JSON.stringify(event.detail.row.Id));
+            console.log(JSON.stringify(event.detail.row));
+            const row = event.detail.row;
+            const rows = this.orderData;
+          //  console.log(JSON.stringify(rows));
+           // const rowIndex = this.orderData.findIndex(event.detail.row);
+          //  console.log (' row index ' + rowIndex);
+          /*  this.orderCost -= row.Cost__c * row.Portions__c;
+            rows.splice(rowIndex, 1);
+            this.orderData = rows;*/
+
         }
+    
     }
 
 /*
