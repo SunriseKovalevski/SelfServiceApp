@@ -12,6 +12,7 @@ import getNext from '@salesforce/apex/displaycases.getNext';
 import getPrevious from '@salesforce/apex/displaycases.getPrevious';
 import TotalRecords from '@salesforce/apex/displaycases.TotalRecords';
 import getMenuItems from '@salesforce/apex/MenuItemsClass.getMenuItems';
+import UserPreferencesHideS1BrowserUI from '@salesforce/schema/User.UserPreferencesHideS1BrowserUI';
 
 
 const DELAY = 300;
@@ -35,6 +36,7 @@ const columns = [
 
 
 const COLS = [
+    { label: 'Number', fieldName: 'Num' },
     { label: 'Name', fieldName: 'Name' },
     { label: 'Cost per Serving', fieldName: 'Cost__c'},
     { label: 'Description', fieldName: 'Description__c'},
@@ -105,7 +107,7 @@ export default class MenuPage extends LightningElement {
     }*/
 
     openPopupOrderList(event) {
-        
+
     }
 
 
@@ -131,7 +133,14 @@ export default class MenuPage extends LightningElement {
 
             this.newOrderItem = this.data.filter(element => {
                 return element.Id.toUpperCase().includes(event.detail.row.Id.toUpperCase());
-            })
+            }); 
+            console.log(JSON.stringify(this.newOrderItem[0]));
+            const hi = JSON.stringify(this.newOrderItem[0]);
+            console.log(hi[0]);
+            const hello = hi[0] + '"Num":"' + this.orderData.length +'",' + hi.slice(1);
+            console.log(hello);
+            this.newOrderItem[0] = JSON.parse(hello);
+            console.log(this.newOrderItem[0]);
             this.orderData = [...this.orderData, this.newOrderItem[0]];
             this.orderCost += this.newOrderItem[0].Cost__c * this.newOrderItem[0].Portions__c;
            /* this.orderData.push (this.newOrderItem[0]
