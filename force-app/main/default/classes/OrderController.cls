@@ -31,7 +31,7 @@ public with sharing class OrderController {
                                     String name,
                                     String comment,
                                     Integer portions,
-                                    Integer cost,
+                                    Double cost,
                                     String description,
                                     Integer num){
                                         

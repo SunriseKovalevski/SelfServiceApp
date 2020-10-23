@@ -20,8 +20,6 @@
                     
                 <lightning-layout-item size = "12" margin= "around-small">
 
-
-                    
                         <lightning-input placeholder="type here..." type="search" label="Search" onchange={handleSearch}>
                         </lightning-input>
                         <lightning-button label="Click" variant="brand" onclick={handleFilter}></lightning-button>
@@ -74,7 +72,7 @@
             </lightning-layout-item>
             <lightning-layout-item size = "12"  padding = "around-medium">
                 <template if:true={hasOrders}>
-                    <p>Order Cost: {orderCost}</p>
+                    <p>Order Cost: {orderCost}</p>  
                         
                 <lightning-button variant="brand" label="Make an Order" title="Primary action" onclick={handleClickMakeAnOrder} class="slds-m-left_x-small"></lightning-button>
                 <lightning-button variant="brand" label="Order details" title="Primary action" onclick={showHideOrderDetails} class="slds-m-left_x-small"></lightning-button>

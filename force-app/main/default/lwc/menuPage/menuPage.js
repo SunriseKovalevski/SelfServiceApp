@@ -13,7 +13,8 @@ import getPrevious from '@salesforce/apex/displaycases.getPrevious';
 import TotalRecords from '@salesforce/apex/displaycases.TotalRecords';
 import getMenuItems from '@salesforce/apex/MenuItemsClass.getMenuItems';
 import UserPreferencesHideS1BrowserUI from '@salesforce/schema/User.UserPreferencesHideS1BrowserUI';
-
+import insertOrder from '@salesforce/apex/OrderController.insertOrder';
+import insertOrderItem from '@salesforce/apex/OrderController.insertOrderItem';
 
 const DELAY = 300;
 
@@ -36,7 +37,7 @@ const columns = [
 
 
 const COLS = [
-    { label: 'Number', fieldName: 'Num' },
+    { label: 'Number', fieldName: 'Num__с' },
     { label: 'Name', fieldName: 'Name' },
     { label: 'Cost per Serving', fieldName: 'Cost__c'},
     { label: 'Description', fieldName: 'Description__c'},
@@ -73,6 +74,7 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
+    newOrderId;
     newOrderItem;
     rowOffset = 0;
     orderCost = 0;
@@ -117,7 +119,56 @@ export default class MenuPage extends LightningElement {
 
 
     handleClickMakeAnOrder(event) {
+        console.log(' add new Order: ' + JSON.stringify(this.orderData));
+      
+       (async () => {
+             this.newOrderId = await insertOrder();
+        
+             this.orderData.forEach((element) => {
+                const hi = JSON.stringify(element);
+                const hello = hi[0] + '"Order__c":"' + this.newOrderId +'",' + hi.slice(1);
+                element = JSON.parse(hello); 
+                console.log(JSON.stringify(element));
 
+                insertOrderItem({orderId: element.Order__c, 
+                                name: element.Name, 
+                                comment: element.Comment__c, 
+                                portions: element.Portions__c, 
+                                cost: element.Cost__c, 
+                                description: element.Description__c, 
+                                num: element.Num__c}).then(res=>{
+                    console.log(res);
+                    return res;
+                }).catch(error=>{
+                   
+                    console.log(error);
+                    return;
+                }); 
+             /*
+                (async () => {
+                   
+               
+                const oiID =  await insertOrderItem(element.Order__c, 
+                                            element.Name, 
+                                            element.Comment__c, 
+                                            element.Portions__c, 
+                                            element.Cost__c, 
+                                            element.Description__c, 
+                                            element.Num__c);
+                console.log(' ' + oiId);
+            })();*/
+             });
+             
+             /*
+             Id orderId, 
+                                    String name,
+                                    String comment,
+                                    Integer portions,
+                                    Integer cost,
+                                    String description,
+                                    Integer num*/
+        })();
+        
     }
 
     @track orderData = [];
@@ -137,7 +188,7 @@ export default class MenuPage extends LightningElement {
             console.log(JSON.stringify(this.newOrderItem[0]));
             const hi = JSON.stringify(this.newOrderItem[0]);
             console.log(hi[0]);
-            const hello = hi[0] + '"Num":"' + this.orderData.length +'",' + hi.slice(1);
+            const hello = hi[0] + '"Num__с":"' + this.orderData.length +'",' + hi.slice(1);
             console.log(hello);
             this.newOrderItem[0] = JSON.parse(hello);
             console.log(this.newOrderItem[0]);
