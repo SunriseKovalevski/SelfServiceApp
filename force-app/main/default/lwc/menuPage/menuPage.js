@@ -74,6 +74,7 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
+    isModalOpen = false;
     showOrderDetails = false;
     newOrderId;
     newOrderItem;
@@ -109,15 +110,7 @@ export default class MenuPage extends LightningElement {
         }
     }*/
 
-    openPopupOrderList(event) {
-
-    }
-
-
-    showHideOrderDetails(event) {
-        // show hide orderDetails
-    }
-
+   
 
     handleClickMakeAnOrder(event) {
         console.log(' add new Order: ' + JSON.stringify(this.orderData));
@@ -170,6 +163,19 @@ export default class MenuPage extends LightningElement {
                                     Integer num*/
         })();
         
+    }
+    closeModal() {
+        // to close modal set isModalOpen tarck value as false
+        this.isModalOpen = false;
+    }
+    submitDetails() {
+        // to close modal set isModalOpen tarck value as false
+        //Add your code to call apex method or do some processing
+        this.isModalOpen = false;
+    }
+
+    openPopupOrderList() {
+        this.isModalOpen = !this.isModalOpen;
     }
 
     showHideOrderDetails () {
