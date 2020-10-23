@@ -15,9 +15,14 @@ import getMenuItems from '@salesforce/apex/MenuItemsClass.getMenuItems';
 import UserPreferencesHideS1BrowserUI from '@salesforce/schema/User.UserPreferencesHideS1BrowserUI';
 import insertOrder from '@salesforce/apex/OrderController.insertOrder';
 import insertOrderItem from '@salesforce/apex/OrderController.insertOrderItem';
+import getLaterOrderList from '@salesforce/apex/OrderController.getLaterOrderList';
 
 const DELAY = 300;
 
+const orderColumns = [
+    { label: 'Name', fieldName: 'Name', sortable: "true" },
+    
+];
 
 const columns = [
     { label: 'Name', fieldName: 'Name', sortable: "true" },
@@ -74,6 +79,7 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
+    laterOrderList=[];
     isModalOpen = false;
     showOrderDetails = false;
     newOrderId;
@@ -92,8 +98,13 @@ export default class MenuPage extends LightningElement {
     tmpData;
     filterData=[];
 
+    orderColumns = orderColumns;
     columns = columns;
     cols = COLS;
+
+  
+/*
+    @wire(getLaterOrderList) laterOrderList;*/
 
     @wire(getItemsTree) itemsTree;
  /*   @wire(getMenuItems) 
@@ -176,6 +187,12 @@ export default class MenuPage extends LightningElement {
 
     openPopupOrderList() {
         this.isModalOpen = !this.isModalOpen;
+        if (this.isModalOpen) {
+                   (async () => {
+                 this.laterOrderList = await getLaterOrderList();
+                 console.log(JSON.stringify(this.laterOrderList));
+                })();
+        }
     }
 
     showHideOrderDetails () {

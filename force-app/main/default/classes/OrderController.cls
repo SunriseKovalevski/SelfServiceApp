@@ -14,6 +14,11 @@ public with sharing class OrderController {
                 WITH SECURITY_ENFORCED];
     }
 
+    @AuraEnabled(cacheable=true)
+    public static List<Order__c> getLaterOrderList(){
+        return [SELECT Id, Name FROM Order__c WITH SECURITY_ENFORCED];
+    }
+
     @AuraEnabled
     public static Id insertOrder(){
         Order__c order = new Order__c();

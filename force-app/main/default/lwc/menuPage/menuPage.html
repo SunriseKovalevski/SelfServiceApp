@@ -34,10 +34,16 @@
                                 </header>
                                 <!-- Modal/Popup Box LWC body starts here -->
                                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                                    <p><b>Modals/Popup Box are used to display content in a layer above the app.
-                                    </b></p>
-                                    <p><b>This paradigm is used in cases such as the creation or editing of a record, as well as various types of messaging and wizards.
-                                    </b></p>
+                                    <lightning-datatable
+                                        class="laterOrders"
+                                        key-field="id"
+                                        data={laterOrderList}
+                                        columns={orderColumns} >
+
+                                    </lightning-datatable>
+
+
+                                  
                                 </div>
                                 <!-- Modal/Popup Box LWC footer starts here -->
                                 <footer class="slds-modal__footer">
