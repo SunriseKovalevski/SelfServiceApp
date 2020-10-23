@@ -74,6 +74,7 @@ const COLS = [
 
 export default class MenuPage extends LightningElement {
 
+    showOrderDetails = false;
     newOrderId;
     newOrderItem;
     rowOffset = 0;
@@ -169,6 +170,10 @@ export default class MenuPage extends LightningElement {
                                     Integer num*/
         })();
         
+    }
+
+    showHideOrderDetails () {
+        this.showOrderDetails = !this.showOrderDetails;
     }
 
     @track orderData = [];
